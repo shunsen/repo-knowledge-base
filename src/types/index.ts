@@ -63,3 +63,20 @@ export interface Paginated<T> extends Pagination {
   items: T[];
   totalPages: number;
 }
+
+export type IssueState = "open" | "closed";
+
+/** 仓库 Issue（已过滤 Pull Request，下划线字段清洗为驼峰） */
+export interface RepoIssue {
+  id: number;
+  number: number;
+  title: string;
+  body: string;
+  state: IssueState;
+  htmlUrl: string;
+  author: string;
+  labels: string[];
+  commentsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}

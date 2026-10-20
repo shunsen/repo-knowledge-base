@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import { shallowRef } from 'vue'
-import type { Component } from 'vue'
-import HomeView from './views/HomeView.vue'
-import ChatView from './views/ChatView.vue'
+import { shallowRef } from "vue";
+import type { Component } from "vue";
+import HomeView from "./views/HomeView.vue";
+import IssuesView from "./views/IssuesView.vue";
+import ChatView from "./views/ChatView.vue";
 
-type TabKey = 'home' | 'chat'
+type TabKey = "home" | "issues" | "chat";
 
-const tabs: ReadonlyArray<{ key: TabKey; label: string; component: Component }> = [
-  { key: 'home', label: '仓库配置', component: HomeView },
-  { key: 'chat', label: '知识库问答', component: ChatView },
-]
+const tabs: ReadonlyArray<{
+  key: TabKey;
+  label: string;
+  component: Component;
+}> = [
+  { key: "home", label: "仓库配置", component: HomeView },
+  { key: "issues", label: "Issues 浏览", component: IssuesView },
+  { key: "chat", label: "知识库问答", component: ChatView },
+];
 
-const activeTab = shallowRef<TabKey>('home')
+const activeTab = shallowRef<TabKey>("home");
 
 function resolveComponent(key: TabKey): Component {
-  return tabs.find((tab) => tab.key === key)?.component ?? HomeView
+  return tabs.find((tab) => tab.key === key)?.component ?? HomeView;
 }
 </script>
 
