@@ -11,7 +11,8 @@ const DEFAULT_MODEL = 'gpt-4o-mini'
 
 const apiBase = ref(localStorage.getItem(API_BASE_KEY) ?? DEFAULT_API_BASE)
 const model = ref(localStorage.getItem(MODEL_KEY) ?? DEFAULT_MODEL)
-const apiKey = ref('')
+// 构建时注入的 Key 作为默认值，用户在表单中可覆盖
+const apiKey = ref(import.meta.env.VITE_LLM_API_KEY ?? '')
 
 watch(apiBase, (value) => localStorage.setItem(API_BASE_KEY, value))
 watch(model, (value) => localStorage.setItem(MODEL_KEY, value))

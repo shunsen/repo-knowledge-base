@@ -20,7 +20,7 @@ export function useChat(getLlmConfig: () => LlmConfig | null) {
 
     const llmConfig = getLlmConfig();
     if (!llmConfig || !llmConfig.apiKey || !llmConfig.model) {
-      chatStore.setError("请先在上方完善 LLM 配置（API Base / Key / 模型）");
+      chatStore.setError("请先在上方完善 LLM 配置（API Base  / Key / 模型）");
       return;
     }
 
