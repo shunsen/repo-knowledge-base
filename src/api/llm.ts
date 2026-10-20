@@ -1,15 +1,15 @@
-import type { ChatMessage, LlmConfig } from '../types'
-import { requestJson } from './request'
+import type { ChatMessage, LlmConfig } from "../types";
+import { requestJson } from "./request";
 
 interface LlmChoice {
   message: {
-    role: string
-    content: string | null
-  }
+    role: string;
+    content: string | null;
+  };
 }
 
 interface LlmChatResponse {
-  choices: LlmChoice[]
+  choices: LlmChoice[];
 }
 
 /**
@@ -21,11 +21,11 @@ export async function createChatCompletion(
   messages: ChatMessage[],
   signal?: AbortSignal,
 ): Promise<string> {
-  const base = config.apiBase.replace(/\/+$/, '')
+  const base = config.apiBase.replace(/\/+$/, "");
   const data = await requestJson<LlmChatResponse>(`${base}/chat/completions`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${config.apiKey}`,
     },
     body: {
@@ -35,7 +35,25 @@ export async function createChatCompletion(
         .map(({ role, content }) => ({ role, content })),
     },
     signal,
-  })
+    timeoutMs: 60_000,
+  });
 
-  return data.choices[0]?.message.content ?? ''
+  return data.choices[0]?.message.content ?? "";
+}
+
+/** 拉取 OpenAI 兼容接口的可用模型列表（GET /models），按 id 排序返回 */
+export async function listModels(
+  config: LlmConfig,
+  signal?: AbortSignal,
+): Promise<string[]> {
+  const base = config.apiBase.replace(/\/+$/, "");
+  const data = await requestJson<{ data: Array<{ id: string }> }>(
+    `${base}/models`,
+    {
+      headers: { Authorization: `Bearer ${config.apiKey}` },
+      signal,
+      timeoutMs: 15_000,
+    },
+  );
+  return data.data.map((item) => item.id).sort();
 }
